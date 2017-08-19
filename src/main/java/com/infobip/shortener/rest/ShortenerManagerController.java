@@ -38,18 +38,17 @@ public class ShortenerManagerController {
   @RequestMapping(path = "/account", method = RequestMethod.POST)
   public ResponseEntity<AccountResponseDto> createAccount(@RequestBody AccountRequestDto requestDto) {
     val result = managerService.createAccount(requestDto.getAccountId());
-
     if (result.isSuccess()) {
       return new ResponseEntity<>(toDto(result), HttpStatus.CREATED);
     } else {
       return new ResponseEntity<>(toDto(result), HttpStatus.BAD_REQUEST); // is 409_CONFLICT better?
     }
-
   }
 
   @RequestMapping(path = "/register", method = RequestMethod.POST)
   public ResponseEntity<ShortenedUrlResponseDto> register(@RequestBody ShortUrlRequestDto requestDto) {
-    throw new UnsupportedOperationException("not done yet");
+    val result = managerService.register(requestDto.getUrl(), requestDto.getRedirectType());
+    return new ResponseEntity<>(new ShortenedUrlResponseDto(result), HttpStatus.OK);
   }
 
   @RequestMapping(path = "/statistic/{AccountId}", method = RequestMethod.GET)
