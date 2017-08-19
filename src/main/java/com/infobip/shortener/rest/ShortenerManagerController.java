@@ -41,19 +41,27 @@ public class ShortenerManagerController {
     if (result.isSuccess()) {
       return new ResponseEntity<>(toDto(result), HttpStatus.CREATED);
     } else {
-      return new ResponseEntity<>(toDto(result), HttpStatus.BAD_REQUEST); // is 409_CONFLICT better?
+      return new ResponseEntity<>(toDto(result), HttpStatus.BAD_REQUEST); // is 409 CONFLICT better?
     }
   }
 
   @RequestMapping(path = "/register", method = RequestMethod.POST)
   public ResponseEntity<ShortenedUrlResponseDto> register(@RequestBody ShortUrlRequestDto requestDto) {
+    //TODO(apuks): validate url
+
     val result = managerService.register(requestDto.getUrl(), requestDto.getRedirectType());
     return new ResponseEntity<>(new ShortenedUrlResponseDto(result), HttpStatus.OK);
   }
 
   @RequestMapping(path = "/statistic/{AccountId}", method = RequestMethod.GET)
   public ResponseEntity<Map<String, Integer>> getStatistic(@PathVariable("AccountId") String accountId) {
-    throw new UnsupportedOperationException("not done yet");
+    val result = managerService.getStatistics(accountId);
+
+    if (result == null || result.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    } else {
+      return new ResponseEntity<>(result, HttpStatus.OK);
+    }
   }
 
 }

@@ -1,8 +1,10 @@
 package com.infobip.shortener.service;
 
 import com.infobip.shortener.dao.AccountsDao;
+import com.infobip.shortener.dao.StatisticsDao;
 import com.infobip.shortener.dao.UrlMappingDao;
 import com.infobip.shortener.exception.AccountAlreadyExistedException;
+import com.infobip.shortener.service.model.AccountResponse;
 
 import lombok.val;
 
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.MessageDigest;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -30,13 +33,17 @@ public class ShortenerManagerService {
 
   private final UrlMappingDao urlMappingDao;
 
+  private final StatisticsDao statisticsDao;
+
   @Autowired
   public ShortenerManagerService(@Qualifier("sha-256hasher") MessageDigest hasher,
                                  AccountsDao accountsDao,
-                                 UrlMappingDao urlMappingDao) {
+                                 UrlMappingDao urlMappingDao,
+                                 StatisticsDao statisticsDao) {
     this.hasher = hasher;
     this.accountsDao = accountsDao;
     this.urlMappingDao = urlMappingDao;
+    this.statisticsDao = statisticsDao;
   }
 
   public AccountResponse createAccount(String accountId){
@@ -78,5 +85,9 @@ public class ShortenerManagerService {
 
   private String generateShortName() {
     return RandomStringUtils.randomAlphanumeric(shortUrlLength.get());
+  }
+
+  public Map<String, Integer> getStatistics(String accountId) {
+    return statisticsDao.getStatsByAccountId(accountId);
   }
 }

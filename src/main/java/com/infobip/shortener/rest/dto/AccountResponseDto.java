@@ -2,7 +2,7 @@ package com.infobip.shortener.rest.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.infobip.shortener.service.AccountResponse;
+import com.infobip.shortener.service.model.AccountResponse;
 
 import lombok.Builder;
 import lombok.Data;

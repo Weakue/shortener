@@ -1,4 +1,4 @@
-package com.infobip.shortener.service;
+package com.infobip.shortener.service.model;
 
 
 import lombok.Builder;
