@@ -52,27 +52,23 @@ public class ShortenerManagerController {
   @RequestMapping(path = "/register", method = RequestMethod.POST)
   public ResponseEntity<ShortenedUrlResponseDto> register(@RequestBody ShortUrlRequestDto requestDto,
                                                           @RequestHeader("Authorization") String base64Auth) {
-    if (!isUserAuthorised(base64Auth)) {
+    val account = getAccountFromAuthHeader(base64Auth);
+    if (!managerService.authenticateAccount(account)) {
       return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
     //TODO(apuks): validate url
 
-    val result = managerService.register(requestDto.getUrl(), requestDto.getRedirectType());
+    val result = managerService.register(requestDto.getUrl(), requestDto.getRedirectType(), account.getAccountId());
     return new ResponseEntity<>(new ShortenedUrlResponseDto(result), HttpStatus.OK);
   }
 
-  private boolean isUserAuthorised(String base64Auth) {
-    val account = Account.createAccountFromAuthHeader(new String(Base64
-        .getDecoder()
-        .decode(base64Auth)));
-    return managerService.authenticateAccount(account);
-  }
 
   @RequestMapping(path = "/statistic/{AccountId}", method = RequestMethod.GET)
   public ResponseEntity<Map<String, Integer>> getStatistic(@PathVariable("AccountId") String accountId,
                                                            @RequestHeader("Authorization") String base64Auth) {
-    if (!isUserAuthorised(base64Auth)) {
+    val account = getAccountFromAuthHeader(base64Auth);
+    if (!managerService.authenticateAccount(account)) {
       return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
@@ -84,5 +80,12 @@ public class ShortenerManagerController {
       return new ResponseEntity<>(result, HttpStatus.OK);
     }
   }
+
+  private Account getAccountFromAuthHeader(@RequestHeader("Authorization") String base64Auth) {
+    return Account.createAccountFromAuthHeader(new String(Base64
+        .getDecoder()
+        .decode(base64Auth)));
+  }
+
 
 }
