@@ -23,10 +23,11 @@ public class RedirectService {
   public RedirectEntry processRedirect(String shortName) {
     val redirectEntry = urlMappingDao.getUrlByShortName(shortName);
 
-    CompletableFuture.runAsync(() -> statisticsDao.increaseCounter(urlMappingDao
-            .getAccountIdForShortName(shortName),
-        urlMappingDao.getUrlByShortName(shortName)
-            .getUrl()));
+    val id = urlMappingDao
+        .getAccountIdForShortName(shortName);
+    val url = urlMappingDao.getUrlByShortName(shortName)
+        .getUrl();
+    CompletableFuture.runAsync(() -> statisticsDao.increaseCounter(id, url));
     return redirectEntry;
   }
 

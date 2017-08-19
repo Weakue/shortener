@@ -24,18 +24,16 @@ public class HashMapStatisticsDao implements StatisticsDao {
 
   @Override
   public void increaseCounter(String accountId, String url) {
-    repository.compute(accountId, (id, stats) -> {
-      stats.compute(url, (existedUrl, counter) -> increaseCounter(counter));
-      return stats;
-    });
+
+    Map<String, Integer> stats = repository.get(accountId);
+    if (stats == null) {
+      stats = new HashMap<>();
+      stats.put(url, 1);
+      repository.put(accountId, stats);
+    } else {
+      stats.compute(url, (existedUrl,counter) -> counter++);
+    }
+
   }
 
-  private static Integer increaseCounter(Integer counter) {
-    if (counter == null) {
-      counter = 1;
-    } else {
-      counter++;
-    }
-    return counter;
-  }
 }

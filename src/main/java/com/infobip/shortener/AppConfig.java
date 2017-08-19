@@ -12,7 +12,7 @@ import java.security.MessageDigest;
 @Configuration
 public class AppConfig {
 
-  @Value("app.password.hash.algorithm:SHA-256")
+  @Value("${app.password.hash.algorithm:SHA-256}")
   String hashAlgorithm;
 
   @Bean

@@ -82,9 +82,13 @@ public class ShortenerManagerController {
   }
 
   private Account getAccountFromAuthHeader(@RequestHeader("Authorization") String base64Auth) {
+    val splitted = base64Auth.split(" ");
+
+
+
     return Account.createAccountFromAuthHeader(new String(Base64
         .getDecoder()
-        .decode(base64Auth)));
+        .decode(splitted[1])));
   }
 
 

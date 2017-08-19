@@ -22,10 +22,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 public class ShortenerManagerService {
 
-  @Value("app.password.length:8")
+  @Value("${app.password.length:8}")
   private Integer passwordLength;
 
-  @Value("app.url.shortname.length.start:1")
+
+  //I still dont know a cleaner way to do this.
+  @Value("#{new java.util.concurrent.atomic.AtomicInteger("
+      + "new Integer('${app.url.shortname.length.start:1}')"
+      + ".intValue())}")
   private AtomicInteger shortUrlLength;
 
   private final MessageDigest hasher;
