@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RedirectController {
 
+  private final RedirectService redirectService;
+
   @Autowired
-  RedirectService redirectService;
+  public RedirectController(RedirectService redirectService) {
+    this.redirectService = redirectService;
+  }
 
   @RequestMapping(method = RequestMethod.GET, path = "/{shortUrl}")
   public ResponseEntity<String> redirect(@PathVariable("shortUrl") String shortUrl) {

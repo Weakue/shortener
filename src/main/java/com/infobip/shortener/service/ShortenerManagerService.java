@@ -4,6 +4,7 @@ import com.infobip.shortener.dao.AccountsDao;
 import com.infobip.shortener.dao.StatisticsDao;
 import com.infobip.shortener.dao.UrlMappingDao;
 import com.infobip.shortener.exception.AccountAlreadyExistedException;
+import com.infobip.shortener.service.model.Account;
 import com.infobip.shortener.service.model.AccountResponse;
 
 import lombok.val;
@@ -49,7 +50,7 @@ public class ShortenerManagerService {
   public AccountResponse createAccount(String accountId){
     val password = generatePassword();
     try {
-      accountsDao.createAccount(accountId, new String(hasher.digest(password.getBytes())));
+      accountsDao.createAccount(accountId, getHash(password));
     } catch (AccountAlreadyExistedException ex) {
       return AccountResponse.builder()
           .description("Account already exists")
@@ -62,15 +63,10 @@ public class ShortenerManagerService {
         .build();
   }
 
-  private String generatePassword() {
-    return RandomStringUtils.randomAlphanumeric(passwordLength);
-  }
-
-
   public String register(String url, Integer redirectType) {
 
     /* Really not sure that this is a good way to do this,
-    * there is an option to create some getNextAvailableName() into dao.
+    * there is an option to create some getNextAvailableName() method in dao.
     */
     //TODO(apuks): reconsider and look again into this.
     String shortName = generateShortName();
@@ -83,11 +79,27 @@ public class ShortenerManagerService {
     return shortName;
   }
 
+  public Map<String, Integer> getStatistics(String accountId) {
+    return statisticsDao.getStatsByAccountId(accountId);
+  }
+
+  public boolean authenticateAccount(Account account) {
+    return accountsDao.authenticateAccount(account.getAccountId(), getHash(account.getPassword()));
+  }
+
+
   private String generateShortName() {
     return RandomStringUtils.randomAlphanumeric(shortUrlLength.get());
   }
 
-  public Map<String, Integer> getStatistics(String accountId) {
-    return statisticsDao.getStatsByAccountId(accountId);
+  private String getHash(String password) {
+    return new String(hasher.digest(password.getBytes()));
   }
+
+  private String generatePassword() {
+    return RandomStringUtils.randomAlphanumeric(passwordLength);
+  }
+
+
+
 }
