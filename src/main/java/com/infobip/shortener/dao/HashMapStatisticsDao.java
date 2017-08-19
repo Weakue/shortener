@@ -25,6 +25,7 @@ public class HashMapStatisticsDao implements StatisticsDao {
   @Override
   public void increaseCounter(String accountId, String url) {
 
+    //TODO(apuks): There is a classic lost update case, think/send questions
     Map<String, Integer> stats = repository.get(accountId);
     if (stats == null) {
       stats = new HashMap<>();
