@@ -1,13 +1,19 @@
 package com.infobip.shortener.rest;
 
 
+import static com.infobip.shortener.rest.dto.AccountResponseDto.toDto;
+
 import com.infobip.shortener.rest.dto.AccountRequestDto;
 import com.infobip.shortener.rest.dto.AccountResponseDto;
 import com.infobip.shortener.rest.dto.ShortUrlRequestDto;
 import com.infobip.shortener.rest.dto.ShortenedUrlResponseDto;
+import com.infobip.shortener.service.ShortenerManagerService;
 
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,9 +27,24 @@ import java.util.Map;
 @Slf4j
 public class ShortenerManagerController {
 
+  private final ShortenerManagerService managerService;
+
+  @Autowired
+  public ShortenerManagerController(ShortenerManagerService managerService) {
+    this.managerService = managerService;
+  }
+
+
   @RequestMapping(path = "/account", method = RequestMethod.POST)
   public ResponseEntity<AccountResponseDto> createAccount(@RequestBody AccountRequestDto requestDto) {
-    throw new UnsupportedOperationException("not done yet");
+    val result = managerService.createAccount(requestDto.getAccountId());
+
+    if (result.isSuccess()) {
+      return new ResponseEntity<>(toDto(result), HttpStatus.CREATED);
+    } else {
+      return new ResponseEntity<>(toDto(result), HttpStatus.BAD_REQUEST); // is 409_CONFLICT better?
+    }
+
   }
 
   @RequestMapping(path = "/register", method = RequestMethod.POST)
