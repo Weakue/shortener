@@ -15,6 +15,7 @@ import lombok.val;
 
 import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,9 +53,14 @@ public class ShortenerManagerController {
   }
 
   @RequestMapping(path = "/register", method = RequestMethod.POST)
-  public ResponseEntity<ShortenedUrlResponseDto> register(@RequestBody ShortUrlRequestDto requestDto,
-                                                          @RequestHeader("Authorization") String base64Auth) {
-    val account = getAccountFromAuthHeader(base64Auth);
+  public ResponseEntity<ShortenedUrlResponseDto> register(
+      @RequestBody ShortUrlRequestDto requestDto,
+      @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authHeader) {
+
+    if (authHeader == null) {
+      return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+    val account = getAccountFromAuthHeader(authHeader);
     if (!managerService.authenticateAccount(account)) {
       return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
@@ -62,18 +68,24 @@ public class ShortenerManagerController {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
     val result = managerService.register(requestDto.getUrl(), requestDto.getRedirectType(), account.getAccountId());
-    return new ResponseEntity<>(new ShortenedUrlResponseDto(result), HttpStatus.OK);
+    return new ResponseEntity<>(new ShortenedUrlResponseDto(result), HttpStatus.CREATED);
   }
 
 
   @RequestMapping(path = "/statistic/{AccountId}", method = RequestMethod.GET)
-  public ResponseEntity<Map<String, Integer>> getStatistic(@PathVariable("AccountId") String accountId,
-                                                           @RequestHeader("Authorization") String base64Auth) {
-    val account = getAccountFromAuthHeader(base64Auth);
+  public ResponseEntity<Map<String, Integer>> getStatistic(
+      @PathVariable("AccountId") String accountId,
+      @RequestHeader(value =  HttpHeaders.AUTHORIZATION, required = false) String authHeader) {
+
+    if (authHeader == null) {
+      return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+    val account = getAccountFromAuthHeader(authHeader);
     if (!managerService.authenticateAccount(account)) {
       return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
+    //TODO(apuks):is there should be non ever redirected urls stats?
     val result = managerService.getStatistics(accountId);
 
     if (result == null || result.isEmpty()) {
@@ -83,10 +95,8 @@ public class ShortenerManagerController {
     }
   }
 
-  private Account getAccountFromAuthHeader(@RequestHeader("Authorization") String base64Auth) {
-    val splitted = base64Auth.split(" ");
-
-
+  private Account getAccountFromAuthHeader(String base64Auth) {
+    val splitted = base64Auth.split(" "); //Should i precompile this?
 
     return Account.createAccountFromAuthHeader(new String(Base64
         .getDecoder()

@@ -78,7 +78,8 @@ public class ShortenerManagerService {
   }
 
   public boolean authenticateAccount(Account account) {
-    return accountsDao.authenticateAccount(account.getAccountId(), getHash(account.getPassword()));
+    return account != null
+        && accountsDao.authenticateAccount(account.getAccountId(), getHash(account.getPassword()));
   }
 
 

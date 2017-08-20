@@ -1,5 +1,6 @@
 package com.infobip.shortener.rest.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
