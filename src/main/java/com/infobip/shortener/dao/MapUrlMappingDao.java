@@ -20,7 +20,7 @@ public class MapUrlMappingDao implements UrlMappingDao {
 
   private Map<String, RedirectEntry> redirectEntryRepository = new ConcurrentHashMap<>();
   private Map<String, String> shortNameToAccountRepository = new ConcurrentHashMap<>();
-  private AtomicInteger sequenceCounter = new AtomicInteger();
+  private AtomicInteger sequenceCounter = new AtomicInteger(1);
 
   private static String intToCharSequence(int n) {
     val stringBuilder = new StringBuilder();

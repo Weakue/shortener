@@ -16,8 +16,10 @@ public class MapUrlMappingDaoTest {
     val dao = new MapUrlMappingDao();
     HashSet<String> set = new HashSet<>();
     //On my mbp this runs 0.581 secs, so i think thats appropriate. No guaranties still
-    for(int i = 0; i < 1000000; i++) {
-      if (!set.add(dao.getNextAvailableName())) {
+    for(int i = 0; i < 10; i++) {
+      val test = dao.getNextAvailableName();
+      System.out.println(test);
+      if (!set.add(test)) {
         fail();
       }
     }

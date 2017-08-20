@@ -43,10 +43,8 @@ public class HashMapStatisticsDao implements StatisticsDao {
     Map<String, Integer> stats = repository.get(accountId);
     if (stats == null) {
       stats = new HashMap<>();
-      stats.put(url, value);
-    } else {
-      stats.compute(url, (existedUrl, counter) -> value);
     }
+    stats.put(url, value);
     repository.put(accountId, stats);
   }
 
@@ -56,7 +54,8 @@ public class HashMapStatisticsDao implements StatisticsDao {
       stats = new HashMap<>();
       stats.put(url, 1);
     } else {
-      stats.compute(url, (existedUrl, counter) -> counter++);
+      val counter = stats.get(url);
+      stats.put(url, counter + 1);
     }
     repository.put(accountId, stats);
   }
