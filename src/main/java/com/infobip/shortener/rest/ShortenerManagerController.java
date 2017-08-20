@@ -13,6 +13,7 @@ import com.infobip.shortener.service.model.Account;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
+import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,7 @@ import java.util.Map;
 public class ShortenerManagerController {
 
   private final ShortenerManagerService managerService;
+  private UrlValidator urlValidator = new UrlValidator();
 
   @Autowired
   public ShortenerManagerController(ShortenerManagerService managerService) {
@@ -56,9 +58,9 @@ public class ShortenerManagerController {
     if (!managerService.authenticateAccount(account)) {
       return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
-
-    //TODO(apuks): validate url
-
+    if (!urlValidator.isValid(requestDto.getUrl())) {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
     val result = managerService.register(requestDto.getUrl(), requestDto.getRedirectType(), account.getAccountId());
     return new ResponseEntity<>(new ShortenedUrlResponseDto(result), HttpStatus.OK);
   }

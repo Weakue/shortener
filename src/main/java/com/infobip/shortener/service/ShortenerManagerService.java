@@ -82,10 +82,6 @@ public class ShortenerManagerService {
   }
 
 
-  private String generateShortName() {
-    return RandomStringUtils.randomAlphanumeric(shortUrlLength.get());
-  }
-
   private String getHash(String password) {
     return new String(hasher.digest(password.getBytes()));
   }
