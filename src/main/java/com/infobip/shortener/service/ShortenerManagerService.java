@@ -27,6 +27,8 @@ public class ShortenerManagerService {
   private final StatisticsDao statisticsDao;
   @Value("${app.password.length:8}")
   private Integer passwordLength;
+  @Value("${app.password.length:localhost}")
+  private String baseServiceUrl;
 
   @Autowired
   public ShortenerManagerService(@Qualifier("sha-256hasher") MessageDigest hasher,
@@ -39,6 +41,14 @@ public class ShortenerManagerService {
     this.statisticsDao = statisticsDao;
   }
 
+  /**
+   * Create account and populate response object.
+   * Alse generates password.
+   *
+   * @throws AccountAlreadyExistedException when account already exists.
+   * @param accountId to create.
+   * @return response with status, password and description.
+   */
   public AccountResponse createAccount(String accountId) {
     val password = generatePassword();
     //Probably can be rewritten to some optionals, but i believe that it depends on real datasource.
@@ -56,17 +66,28 @@ public class ShortenerManagerService {
         .build();
   }
 
+  /**
+   * Register url to be shorted.
+   * @param url to register.
+   * @param redirectType to register.
+   * @param accountId of owner to register.
+   * @return registered shortname.
+   */
   public String register(String url, Integer redirectType, String accountId) {
     String shortName = urlMappingDao.getNextAvailableName();
     urlMappingDao.createMapping(url, shortName, redirectType, accountId);
     statisticsDao.setCounter(accountId, url, 0);
-    return shortName;
+    return baseServiceUrl + "/" + shortName;
   }
 
   public Map<String, Integer> getStatistics(String accountId) {
     return statisticsDao.getStatsByAccountId(accountId);
   }
 
+  /**
+   * @param account to validate.
+   * @return true if account is valid, or false if not or account is null.
+   */
   public boolean authenticateAccount(Account account) {
     return account != null
         && accountsDao.isAccountWithThisHashExists(account.getAccountId(), getHash(account.getPassword()));

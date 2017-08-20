@@ -1,5 +1,7 @@
 package com.infobip.shortener.dao;
 
+import static java.util.stream.Collectors.toMap;
+
 import lombok.val;
 
 import org.springframework.stereotype.Component;
@@ -21,7 +23,9 @@ public class HashMapStatisticsDao implements StatisticsDao {
 
     return stats == null
         ? null
-        : Collections.unmodifiableMap(stats);
+        : stats.entrySet()
+        .stream()
+        .collect(toMap(Map.Entry::getKey, Map.Entry::getValue)); // collect a copy to unmodifiable map.
   }
 
   @Override

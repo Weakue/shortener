@@ -54,6 +54,7 @@ public class ShortenerManagerServiceTest {
     // to avoid using spring runner
     ReflectionTestUtils.setField(service, "passwordLength", 8);
     ReflectionTestUtils.setField(service, "hasher", getHasher());
+    ReflectionTestUtils.setField(service, "baseServiceUrl", "localhost");
   }
 
   @SneakyThrows
@@ -93,7 +94,7 @@ public class ShortenerManagerServiceTest {
     verify(urlMappingDao, times(1))
         .createMapping(anyString(), anyString(), anyInt(), anyString());
 
-    assertEquals("register shoudl return generated url", "1", result);
+    assertEquals("register should return generated url", "localhost/1", result);
   }
 
   @Test

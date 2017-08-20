@@ -12,12 +12,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class RedirectService {
 
-  @Autowired
-  StatisticsDao statisticsDao;
+  private final StatisticsDao statisticsDao;
+
+  private final UrlMappingDao urlMappingDao;
 
   @Autowired
-  UrlMappingDao urlMappingDao;
+  public RedirectService(StatisticsDao statisticsDao, UrlMappingDao urlMappingDao) {
+    this.statisticsDao = statisticsDao;
+    this.urlMappingDao = urlMappingDao;
+  }
 
+  /**
+   * Gets entry for given shortname. Also increases counter for this entry.
+   *
+   * @param shortName to process.
+   * @return RedirectEntry with url and code.
+   */
   public RedirectEntry processRedirect(String shortName) {
     val redirectEntry = urlMappingDao.getUrlByShortName(shortName);
 
