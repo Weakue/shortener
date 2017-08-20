@@ -27,7 +27,7 @@ public class ShortenerManagerService {
   private final StatisticsDao statisticsDao;
   @Value("${app.password.length:8}")
   private Integer passwordLength;
-  @Value("${app.password.length:localhost}")
+  @Value("${app.service.baseUrl:localhost}")
   private String baseServiceUrl;
 
   @Autowired
