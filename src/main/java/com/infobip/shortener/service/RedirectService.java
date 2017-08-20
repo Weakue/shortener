@@ -27,7 +27,7 @@ public class RedirectService {
         .getAccountIdForShortName(shortName);
     val url = urlMappingDao.getUrlByShortName(shortName)
         .getUrl();
-    CompletableFuture.runAsync(() -> statisticsDao.increaseCounter(id, url));
+    statisticsDao.increaseCounter(id, url);
     return redirectEntry;
   }
 

@@ -9,4 +9,6 @@ public interface UrlMappingDao {
   RedirectEntry getUrlByShortName(String shortName);
 
   String getAccountIdForShortName(String shortName);
+
+  String getNextAvailableName();
 }

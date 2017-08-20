@@ -68,17 +68,7 @@ public class ShortenerManagerService {
   }
 
   public String register(String url, Integer redirectType, String accountId) {
-
-    /* Really not sure that this is a good way to do this,
-    * there is an option to create some getNextAvailableName() method in dao.
-    */
-    //TODO(apuks): reconsider and look again into this.
-    String shortName = generateShortName();
-    while (urlMappingDao.getUrlByShortName(shortName) != null) {
-      shortUrlLength.incrementAndGet();
-      shortName = generateShortName();
-    }
-
+    String shortName = urlMappingDao.getNextAvailableName();
     urlMappingDao.createMapping(url, shortName, redirectType, accountId);
     return shortName;
   }
