@@ -1,16 +1,13 @@
 package com.infobip.shortener.rest;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.contains;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.infobip.shortener.rest.ShortenerManagerController;
 import com.infobip.shortener.rest.dto.AccountRequestDto;
 import com.infobip.shortener.rest.dto.ShortUrlRequestDto;
 import com.infobip.shortener.service.ShortenerManagerService;

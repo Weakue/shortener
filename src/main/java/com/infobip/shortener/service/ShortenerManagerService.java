@@ -17,20 +17,12 @@ import org.springframework.stereotype.Service;
 
 import java.security.MessageDigest;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class ShortenerManagerService {
 
   @Value("${app.password.length:8}")
   private Integer passwordLength;
-
-
-  //I still dont know a cleaner way to do this.
-  @Value("#{new java.util.concurrent.atomic.AtomicInteger("
-      + "new Integer('${app.url.shortname.length.start:1}')"
-      + ".intValue())}")
-  private AtomicInteger shortUrlLength;
 
   private final MessageDigest hasher;
 
