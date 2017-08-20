@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @SpringBootApplication
 public class ShortenerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ShortenerApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(ShortenerApplication.class, args);
+  }
 }

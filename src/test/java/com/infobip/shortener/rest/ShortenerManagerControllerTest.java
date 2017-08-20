@@ -84,7 +84,7 @@ public class ShortenerManagerControllerTest {
         .thenReturn(false);
 
     mockMvc.perform(post("/register")
-        .header(HttpHeaders.AUTHORIZATION,getAuthHeader())
+        .header(HttpHeaders.AUTHORIZATION, getAuthHeader())
         .content(preprateShortUrlRequest("anyUrl"))
         .contentType(APPLICATION_JSON))
         .andExpect(status().isForbidden());
@@ -96,7 +96,7 @@ public class ShortenerManagerControllerTest {
         .thenReturn(true);
 
     mockMvc.perform(post("/register")
-        .header(HttpHeaders.AUTHORIZATION,getAuthHeader())
+        .header(HttpHeaders.AUTHORIZATION, getAuthHeader())
         .content(preprateShortUrlRequest("http://stackoverflow.com/questions/1567929/website-safe-data-"
             + "access-architecture-question?rq=1"))
         .contentType(APPLICATION_JSON))
@@ -109,7 +109,7 @@ public class ShortenerManagerControllerTest {
         .thenReturn(true);
 
     mockMvc.perform(post("/register")
-        .header(HttpHeaders.AUTHORIZATION,getAuthHeader())
+        .header(HttpHeaders.AUTHORIZATION, getAuthHeader())
         .content(preprateShortUrlRequest("htp://stackoverflow.com/questions/1567929/website-safe-data-"
             + "access-architecture-question?rq=1"))
         .contentType(APPLICATION_JSON))
@@ -129,7 +129,7 @@ public class ShortenerManagerControllerTest {
         .thenReturn(false);
 
     mockMvc.perform(get("/statistic/someAcc")
-        .header(HttpHeaders.AUTHORIZATION,getAuthHeader())
+        .header(HttpHeaders.AUTHORIZATION, getAuthHeader())
         .contentType(APPLICATION_JSON))
         .andExpect(status().isForbidden());
   }
@@ -144,7 +144,7 @@ public class ShortenerManagerControllerTest {
         .thenReturn(stats);
 
     mockMvc.perform(get("/statistic/someAcc")
-        .header(HttpHeaders.AUTHORIZATION,getAuthHeader())
+        .header(HttpHeaders.AUTHORIZATION, getAuthHeader())
         .contentType(APPLICATION_JSON))
         .andExpect(status().isOk());
   }
@@ -157,7 +157,7 @@ public class ShortenerManagerControllerTest {
         .thenReturn(Collections.emptyMap());
 
     mockMvc.perform(get("/statistic/someAcc")
-        .header(HttpHeaders.AUTHORIZATION,getAuthHeader())
+        .header(HttpHeaders.AUTHORIZATION, getAuthHeader())
         .contentType(APPLICATION_JSON))
         .andExpect(status().isNotFound());
   }
@@ -170,7 +170,7 @@ public class ShortenerManagerControllerTest {
         .thenReturn(null);
 
     mockMvc.perform(get("/statistic/someAcc")
-        .header(HttpHeaders.AUTHORIZATION,getAuthHeader())
+        .header(HttpHeaders.AUTHORIZATION, getAuthHeader())
         .contentType(APPLICATION_JSON))
         .andExpect(status().isNotFound());
   }
@@ -189,6 +189,7 @@ public class ShortenerManagerControllerTest {
     val dto = new AccountRequestDto(name);
     return objectMapper.writeValueAsString(dto);
   }
+
   @SneakyThrows
   private String preprateShortUrlRequest(String url) {
     val dto = new ShortUrlRequestDto();

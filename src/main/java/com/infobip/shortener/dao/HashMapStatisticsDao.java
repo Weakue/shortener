@@ -37,7 +37,7 @@ public class HashMapStatisticsDao implements StatisticsDao {
       stats.put(url, 1);
       repository.put(accountId, stats);
     } else {
-      stats.compute(url, (existedUrl,counter) -> counter++);
+      stats.compute(url, (existedUrl, counter) -> counter++);
     }
   }
 

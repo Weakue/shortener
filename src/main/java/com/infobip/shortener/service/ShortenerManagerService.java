@@ -21,16 +21,12 @@ import java.util.Map;
 @Service
 public class ShortenerManagerService {
 
+  private final MessageDigest hasher;
+  private final AccountsDao accountsDao;
+  private final UrlMappingDao urlMappingDao;
+  private final StatisticsDao statisticsDao;
   @Value("${app.password.length:8}")
   private Integer passwordLength;
-
-  private final MessageDigest hasher;
-
-  private final AccountsDao accountsDao;
-
-  private final UrlMappingDao urlMappingDao;
-
-  private final StatisticsDao statisticsDao;
 
   @Autowired
   public ShortenerManagerService(@Qualifier("sha-256hasher") MessageDigest hasher,
@@ -43,8 +39,9 @@ public class ShortenerManagerService {
     this.statisticsDao = statisticsDao;
   }
 
-  public AccountResponse createAccount(String accountId){
+  public AccountResponse createAccount(String accountId) {
     val password = generatePassword();
+    //Probably can be rewritten to some optionals, but i believe that it depends on real datasource.
     try {
       accountsDao.createAccount(accountId, getHash(password));
     } catch (AccountAlreadyExistedException ex) {
@@ -82,7 +79,6 @@ public class ShortenerManagerService {
   private String generatePassword() {
     return RandomStringUtils.randomAlphanumeric(passwordLength);
   }
-
 
 
 }

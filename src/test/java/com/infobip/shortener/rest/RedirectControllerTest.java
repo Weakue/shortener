@@ -4,13 +4,11 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.infobip.shortener.service.RedirectService;
-import com.infobip.shortener.service.model.AccountResponse;
 import com.infobip.shortener.service.model.RedirectEntry;
 
 import org.junit.Test;
@@ -37,23 +35,23 @@ public class RedirectControllerTest {
   @Test
   public void foundResponse() throws Exception {
     when(service.processRedirect(any()))
-        .thenReturn(new RedirectEntry("url",302));
+        .thenReturn(new RedirectEntry("url", 302));
 
     mockMvc.perform(get("/someShortUrl")
         .contentType(APPLICATION_JSON))
         .andExpect(status().isFound())
-        .andExpect(header().string("Location","url"));
+        .andExpect(header().string("Location", "url"));
   }
 
   @Test
   public void movedPermanentlyResponse() throws Exception {
     when(service.processRedirect(any()))
-        .thenReturn(new RedirectEntry("url",301));
+        .thenReturn(new RedirectEntry("url", 301));
 
     mockMvc.perform(get("/someShortUrl")
         .contentType(APPLICATION_JSON))
         .andExpect(status().isMovedPermanently())
-    .andExpect(header().string("Location","url"));
+        .andExpect(header().string("Location", "url"));
   }
 
   @Test

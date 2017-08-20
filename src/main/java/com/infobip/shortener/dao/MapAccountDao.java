@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
-public class MapAccountDao implements AccountsDao{
+public class MapAccountDao implements AccountsDao {
 
   private ConcurrentHashMap<String, String> repository = new ConcurrentHashMap<>();
 

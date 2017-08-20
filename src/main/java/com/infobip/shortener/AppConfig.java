@@ -18,7 +18,7 @@ public class AppConfig {
   @Bean
   @SneakyThrows
   @Qualifier("sha-256hasher")
-  MessageDigest digest(){
+  MessageDigest digest() {
     return MessageDigest.getInstance(hashAlgorithm);
   }
 

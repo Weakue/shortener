@@ -75,7 +75,7 @@ public class ShortenerManagerController {
   @RequestMapping(path = "/statistic/{AccountId}", method = RequestMethod.GET)
   public ResponseEntity<Map<String, Integer>> getStatistic(
       @PathVariable("AccountId") String accountId,
-      @RequestHeader(value =  HttpHeaders.AUTHORIZATION, required = false) String authHeader) {
+      @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authHeader) {
 
     if (authHeader == null) {
       return new ResponseEntity<>(HttpStatus.FORBIDDEN);
