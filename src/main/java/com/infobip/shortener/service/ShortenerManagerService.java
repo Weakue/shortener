@@ -59,6 +59,7 @@ public class ShortenerManagerService {
   public String register(String url, Integer redirectType, String accountId) {
     String shortName = urlMappingDao.getNextAvailableName();
     urlMappingDao.createMapping(url, shortName, redirectType, accountId);
+    statisticsDao.setCounter(accountId, url, 0);
     return shortName;
   }
 

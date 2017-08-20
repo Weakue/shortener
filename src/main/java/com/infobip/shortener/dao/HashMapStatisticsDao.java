@@ -29,16 +29,32 @@ public class HashMapStatisticsDao implements StatisticsDao {
     CompletableFuture.runAsync(() -> increaseCounterSync(accountId, url));
   }
 
-  //synchronized to prevent lost update case
+  @Override
+  public void setCounter(String accountId, String url, Integer value) {
+    CompletableFuture.runAsync(() -> setCounterSync(accountId, url, value));
+  }
+
+  //Not sure that there is so much synchronized block needed
+  private synchronized void setCounterSync(String accountId, String url, Integer value) {
+    Map<String, Integer> stats = repository.get(accountId);
+    if (stats == null) {
+      stats = new HashMap<>();
+      stats.put(url, value);
+    } else {
+      stats.compute(url, (existedUrl, counter) -> value);
+    }
+    repository.put(accountId, stats);
+  }
+
   private synchronized void increaseCounterSync(String accountId, String url) {
     Map<String, Integer> stats = repository.get(accountId);
     if (stats == null) {
       stats = new HashMap<>();
       stats.put(url, 1);
-      repository.put(accountId, stats);
     } else {
       stats.compute(url, (existedUrl, counter) -> counter++);
     }
+    repository.put(accountId, stats);
   }
 
 }

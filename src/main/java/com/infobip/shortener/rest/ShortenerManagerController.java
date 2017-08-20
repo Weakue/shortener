@@ -85,7 +85,6 @@ public class ShortenerManagerController {
       return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
-    //TODO(apuks):is there should be non ever redirected urls stats?
     val result = managerService.getStatistics(accountId);
 
     if (result == null || result.isEmpty()) {

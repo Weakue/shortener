@@ -2,6 +2,8 @@ package com.infobip.shortener.dao;
 
 import com.infobip.shortener.exception.AccountAlreadyExistedException;
 
+import lombok.val;
+
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,7 +26,10 @@ public class MapAccountDao implements AccountsDao {
 
   @Override
   public boolean isAccountWithThisHashExists(String id, String hash) {
-    return repository.getOrDefault(id, null)
-        .equals(hash);
+    val storedHash = repository.get(id);
+
+    return hash != null
+        && storedHash != null
+        && hash.equals(storedHash);
   }
 }

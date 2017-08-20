@@ -57,8 +57,8 @@ public class MapUrlMappingDao implements UrlMappingDao {
     return shortNameToAccountRepository.get(shortName);
   }
 
-  /*It looks business logic in a dao layer.
-  Therefore there was no special requirement to generate proper strings,
+  /*It looks like business logic in a dao layer.
+  Therefore there was no special requirement to use some generational strategy,
   so seed can be generated from RDBMS sequence for e.g.*/
   @Override
   public synchronized String getNextAvailableName() {
