@@ -68,9 +68,8 @@ public class ShortenerManagerService {
 
   public boolean authenticateAccount(Account account) {
     return account != null
-        && accountsDao.authenticateAccount(account.getAccountId(), getHash(account.getPassword()));
+        && accountsDao.isAccountWithThisHashExists(account.getAccountId(), getHash(account.getPassword()));
   }
-
 
   private String getHash(String password) {
     return new String(hasher.digest(password.getBytes()));

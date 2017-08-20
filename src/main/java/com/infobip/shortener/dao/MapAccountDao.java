@@ -23,7 +23,7 @@ public class MapAccountDao implements AccountsDao {
   }
 
   @Override
-  public boolean authenticateAccount(String id, String hash) {
+  public boolean isAccountWithThisHashExists(String id, String hash) {
     return repository.getOrDefault(id, null)
         .equals(hash);
   }

@@ -6,6 +6,6 @@ public interface AccountsDao {
 
   void createAccount(String id, String hash) throws AccountAlreadyExistedException;
 
-  boolean authenticateAccount(String id, String hash);
+  boolean isAccountWithThisHashExists(String id, String hash);
 
 }
