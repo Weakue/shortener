@@ -10,10 +10,11 @@ Some non-standart (regarding to spring boot with WebMVC) attributes can be overr
 
 URL shortener
 Assignment: Make an HTTP service that serves to shorten URLs, with the following functionalities:
- Registration Web address (API)  
- Redirect client in accordance with the shortened URL  
- Usage Statistics (API)  
-Assignment description:
+ * Registration Web address (API)  
+ * Redirect client in accordance with the shortened URL  
+ * Usage Statistics (API)
+ 
+* Assignment description:
 1. Basic architecture
 The service should have two parts: configuration and user.
 1.1. Configuration part
